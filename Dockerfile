@@ -1,32 +1,26 @@
 # This is a comment
 FROM fedora:25
-MAINTAINER rb2
+MAINTAINER evias 
 RUN dnf -y install java-1.8.0-openjdk-headless.x86_64 tar tmux supervisor procps jq unzip gnupg.x86_64
 RUN dnf -y upgrade nss
 
 # NEM software
-RUN curl http://bob.nem.ninja/nis-ncc-0.6.84.tgz > nis-ncc-0.6.84.tgz
+RUN curl -L http://bob.nem.ninja/beta-testnet/nis-0.6.95.tgz > nis-0.6.95.tgz
 
-#RUN curl http://bob.nem.ninja/nis-ncc-0.6.84.tgz.sig > nis-ncc-0.6.84.tgz.sig
-#RUN gpg --keyserver keys.gnupg.net --recv-key A46494A9
-#RUN gpg --verify nis-ncc-0.6.84.tgz.sig nis-ncc-0.6.84.tgz
-
-# New signature scheme, not always published
-RUN sha=$(curl -s http://bigalice3.nem.ninja:7890/transaction/get?hash=$(curl -s  http://bob.nem.ninja/nis-ncc-0.6.84.tgz.sig | grep txId | sed -e 's/txId: //') | jq -r '.transaction.message.payload[10:]') && \
-    echo "$sha nis-ncc-0.6.84.tgz"  > /tmp/sum && \
-    sha256sum -c /tmp/sum
-
-RUN tar zxf nis-ncc-0.6.84.tgz
-
-RUN useradd --uid 1000 nem
+RUN tar zxf nis-0.6.95.tgz
 RUN mkdir -p /home/nem/nem/ncc/
-RUN mkdir -p /home/nem/nem/nis/
-RUN chown nem /home/nem/nem -R
+RUN mkdir -p /home/nem/nem/nis/data
+
+RUN curl -L http://bob.nem.ninja/beta-testnet/nis5_testnet-835k.h2.db.zip > nis5_testnet.h2.db.zip
+RUN unzip nis5_testnet.h2.db.zip
+RUN mv nis5_testnet.h2.db /home/nem/nem/nis/data
+
+RUN adduser nem
+RUN chown -R nem /home/nem/nem
 
 # servant
 RUN curl -L https://github.com/rb2nem/nem-servant/raw/master/servant.zip > servant.zip
 RUN unzip servant.zip
-
 
 # the sample is used as default config in the container
 COPY ./custom-configs/supervisord.conf.sample /etc/supervisord.conf
