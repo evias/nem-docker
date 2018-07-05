@@ -11,12 +11,12 @@ RUN tar zxf nis-0.6.95.tgz
 RUN mkdir -p /home/nem/nem/ncc/
 RUN mkdir -p /home/nem/nem/nis/data
 
+RUN adduser nem
+RUN chown -R nem /home/nem/nem
+
 RUN curl -L http://bob.nem.ninja/beta-testnet/nis5_testnet-835k.h2.db.zip > nis5_testnet.h2.db.zip
 RUN unzip nis5_testnet.h2.db.zip
 RUN mv nis5_testnet.h2.db /home/nem/nem/nis/data
-
-RUN adduser nem
-RUN chown -R nem /home/nem/nem
 
 # servant
 RUN curl -L https://github.com/rb2nem/nem-servant/raw/master/servant.zip > servant.zip
