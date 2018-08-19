@@ -5,9 +5,9 @@ RUN dnf -y install java-1.8.0-openjdk-headless.x86_64 tar tmux supervisor procps
 RUN dnf -y upgrade nss
 
 # NEM software
-RUN curl -L http://bob.nem.ninja/beta-testnet/nis-0.6.95.tgz > nis-0.6.95.tgz
+RUN curl -L http://bob.nem.ninja/beta-testnet/nis-0.6.96.tgz > nis-0.6.96.tgz
 
-RUN tar zxf nis-0.6.95.tgz
+RUN tar zxf nis-0.6.96.tgz
 RUN mkdir -p /home/nem/nem/ncc/
 RUN mkdir -p /home/nem/nem/nis/data
 
